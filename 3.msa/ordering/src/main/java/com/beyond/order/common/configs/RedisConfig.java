@@ -30,7 +30,7 @@ public class RedisConfig {
         configuration.setHostName(host);
         configuration.setPort(port);
         //redis pub/sub기능은 db에 값을 저장하는 기능이 아니므로, 특정db에 의존적이지 않음.
-        return new LettuceConnectionFactory();
+        return new LettuceConnectionFactory(configuration);
     }
     @Bean//이 빈을 주입받아 redis에 저장할 예정
     @Qualifier("ssePubSub")
