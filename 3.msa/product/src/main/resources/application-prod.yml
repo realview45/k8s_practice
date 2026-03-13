@@ -1,0 +1,63 @@
+server:
+  #port번호가 0번일경우, 0~65535중에 현재 host에서 사용하지않는 port임의로 설정
+  port: 8080
+
+eureka:
+  client:
+    enabled: false
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  application:
+    name: product-service
+  datasource:
+    #    url: jdbc:mysql://localhost:3306/ordermsa
+    url: jdbc:mariadb://${DB_HOST}:3306/ordermsa?useSSL=true
+    username: admin
+    password: ${DB_PW}
+    hikari:
+      maximum-pool-size: 1
+  jpa:
+    #    mysql의 포크인 mariaDB안에서
+    database: mysql
+    #    innoDB를 쓰겠다는 설정
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    #    밑에서부터 중요한 설정구리
+    #    ddl문(테이블생성) 자동생성 여부 : true
+    generate-ddl: true
+    #    jpa(인터페이스 명세)의 실질적인 구현체는 hibernate
+    hibernate:
+      #      ddl문 자동생성에 대한 모드(create, update, validate)(레벨)설정 사고나는 지점(정확히)
+      #      create : 매번(서버재시작마다) table을 전체 drop후 재생성(실무에서 환경설정건들지말기) - 프로젝트최초구성시
+      #      update : 엔티티의 변경사항만 alter를 적용. 기존데이터 유지. -개발서버목적
+      #      validate : 실제DB와의 차이점을 check만 하고 ddl문 실행X(콘솔에 변경사항만 출력) - 운영서버목적
+      ddl-auto: create
+    #      콘솔창에 ddl, dml등의 커리르 출력하여 보여주는 옵션
+    show_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  redis:
+    host: redis-service
+    port: 6379
+  kafka:
+    kafka-server: kafka-service:9092
+    consumer:
+      #      카프카에서 그룹id는 컨슈머그룹을 식별하는 ID로서, 동일한 그룹ID를 가진 컨슈머들은 메시지를 분담해서 consume
+      group-id: product-group
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+aws:
+  credentials:
+    access-key: AKI
+    secret-key: BErS
+  region: ap-northeast-2
+  s3:
+    bucket: realview-images

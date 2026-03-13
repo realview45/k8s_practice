@@ -1,0 +1,77 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.8'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.beyond'
+version = '0.0.1-SNAPSHOT'
+description = 'basic project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    //spring 웹서비스(http)를위한 기본 의존성 //@GetMapping등구리
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//    getter, setter등 개발의 편의성을 증대시켜주는 각종 어노테이션 포함하는 의존성 Lombok(플러그인추가)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+
+//    db 드라이버 : mariadb, mysql, oracle 등
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+//    db 관리 기술 : jdbc, mybatis(ibatis), jpa(spring data jpa)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+//    값 검증을 위한 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
+
+    //swagger사용하기위한 의존성 추가 접속 url : http://localhost:8080/swagger-ui.html
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+    //redis 연결작업을 위한 의존성추가
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //    batch의존성추가
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    //    파일처리를 위한 aws 의존성 추가
+    implementation 'software.amazon.awssdk:s3:2.29.50'
+
+//    아래는 테스트코드 작성을 위한 의존성
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+//    값 검증을 위한 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+//    재고관련 rdb동기화작업을 이벤트기반 비동기적으로 처리하기위한 rabbitmq의존성 추가
+//    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+    // 마이크로서비스
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'  // Eureka 서비스 등록/발견
+
+    //    재고감소 비동기처리를 위한 kafka관련 의존성추가
+    implementation 'org.springframework.kafka:spring-kafka'
+}
+// Spring Cloud Version에 대한 별도 설정 필요
+dependencyManagement{
+    imports{
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2024.0.0'
+    }
+}
+tasks.named('test') {
+	useJUnitPlatform()
+}
